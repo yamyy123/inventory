@@ -4,28 +4,30 @@ option go_package = "github.com/kiran-blockchain/nextxd-go-advanced/grpc-mongo";
 
 package grpc;
 
-service InventoryService{
-    rpc CreateInventory(InventorySKU)returns(InventoryResponse);
-}
-message InventorySKU {
-    string Sku = 1;
-   Price Price =2;
-    double Quantity = 3;
-     Options Options=4;
+service InventoryService {
+    rpc CreateInventory(InventorySKU) returns (InventoryResponse);
+    rpc UpdateInventory(UpdatedInventory)returns(InventoryResponse);
 }
 
-message Price {
-    double Base = 1;
-    string Currency = 2;
-    double Discount = 3;
+message InventorySKU {
+    string sku = 1;
+    Price price = 2;
+    double quantity = 3;
+    Options options = 4;
+}
+
+message Price{
+    double base=1;
+    string currency=2;
+    double discount=3;
 }
 
 message Options {
-   Size Size = 1;
-    repeated string Features = 2;
-    repeated string Colors = 3;
-    string Ruling = 4;
-    string Image = 5;
+    Size size = 1;
+    repeated string features = 2;
+    repeated string colors = 3;
+    string ruling = 4;
+    string image = 5;
 }
 
 message Size {
@@ -35,12 +37,10 @@ message Size {
 }
 
 message InventoryResponse {
-    string Response=1;
+    string Response = 1;
 }
 
-
-
-
-
-
-
+message UpdatedInventory {
+    string sku=1;
+    double quantity=2;
+}

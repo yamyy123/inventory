@@ -3,46 +3,75 @@ package controllers
 import (
 	//"inventory_SKU/interfaces"
 	"context"
+	"fmt"
 	pro "inventory_SKU/grpc"
 	"inventory_SKU/interfaces"
 	"inventory_SKU/models"
-	"net/http"
-	"strings"
-
-	"github.com/gin-gonic/gin"
+	//	"net/http"
+	//"strings"
+	// "github.com/gin-gonic/gin"
 )
 
-type RPCServer struct{
+type RPCServer struct {
 	pro.UnimplementedInventoryServiceServer
 }
 
 var (
 	InventoryService interfaces.IInventory
+	UpdateService    interfaces.IUpdateInventory
 )
 
-func (s *RPCServer) CreateInventory(ctx context.Context, req *pro.InventorySKU)(*pro.InventoryResponse) {
+func (s *RPCServer) CreateInventory(ctx context.Context, req *pro.InventorySKU) (*pro.InventoryResponse, error) {
 	dbCustomer := &models.Inventory_SKU{
+
 		Sku: req.Sku,
-		Price: models.Price_type{
-			Base:     req.Price.Base,         // Set your desired values
-			Currency: req.Price.Currency,        // Set your desired values
-			Discount: 5.0,          // Set your desired values
+		Price: models.Price{
+			Base:     req.Price.Base,
+			Currency: req.Price.Currency,
+			Discount: req.Price.Discount,
 		},
-		Quantity: 100.0,           // Set your desired value
-		Options: models.Options_type{
-			Size: models.Size_type{
-				H: 10.0,            // Set your desired values
-				L: 20.0,            // Set your desired values
-				W: 5.0,             // Set your desired values
+		Quantity: req.Quantity,
+		Options: models.Options{
+			Size: models.Size{
+				H: req.Options.Size.H,
+				L: req.Options.Size.L,
+				W: req.Options.Size.W,
 			},
-			Features: []string{"Feature1", "Feature2"}, // Set your desired values
-			Colors:   []string{"Red", "Blue"},          // Set your desired values
-			Ruling:   "Ruled",                         // Set your desired value
-			Image:    "example.jpg",                   // Set your desired value
+			Features: req.Options.Features,
+			Colors:   req.Options.Colors,
+			Ruling:   req.Options.Ruling,
+			Image:    req.Options.Image,
 		},
 	}
-	
+
+	_, err := InventoryService.CreateInventory(dbCustomer)
+	if err != nil {
+		return nil, err
+	} else {
+		responseCustomer := &pro.InventoryResponse{
+			Response: "success",
+		}
+
+		return responseCustomer, nil
 	}
 
+}
 
+func (s *RPCServer) UpdateInventory(ctx context.Context, req *pro.UpdatedInventory) (*pro.InventoryResponse, error) {
 
+		pass := models.UpdatedInventory{
+			Sku:      req.Sku,
+			Quantity: req.Quantity,
+		}
+
+	err := UpdateService.UpdateInventory(&pass)
+	fmt.Println(err)
+	if err != nil {
+		return nil, err
+	}
+
+	responseCustomer := &pro.InventoryResponse{
+		Response: "success",
+	}
+	return responseCustomer, nil
+}

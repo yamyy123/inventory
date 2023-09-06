@@ -7,6 +7,6 @@ import (
 )
 
 type IInventory interface {
-	CreateCustomer(user *models.Inventory_SKU) (string, error)
+	CreateInventory(user *models.Inventory_SKU) (string, error)
 	
 }
