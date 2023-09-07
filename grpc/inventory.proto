@@ -6,7 +6,12 @@ package grpc;
 
 service InventoryService {
     rpc CreateInventory(InventorySKU) returns (InventoryResponse);
+    rpc CreateMoreInventory(MoreInventories)returns (InventoryResponse);
     rpc UpdateInventory(UpdatedInventory)returns(InventoryResponse);
+}
+
+message MoreInventories{
+    repeated InventorySKU InventorySKU=1;
 }
 
 message InventorySKU {

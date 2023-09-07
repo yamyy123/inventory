@@ -50,15 +50,71 @@ func main() {
 	// }
 
 	// fmt.Printf("Response: %s\n", response)
-
-	response, err := client.UpdateInventory(context.Background(), &pb.UpdatedInventory{
-		Sku:      "SKU002",
-		Quantity: 4.0,
-	})
-	if err != nil {
-		log.Fatalf("Failed to call UpdatedInventory: %v", err)
-	}
+  //-----------------------------------------------------------------------------------------
+	// response, err := client.UpdateInventory(context.Background(), &pb.UpdatedInventory{
+	// 	Sku:      "SKU002",
+	// 	Quantity: 4.0,
+	// })
+	// if err != nil {
+	// 	log.Fatalf("Failed to call UpdatedInventory: %v", err)
+	// }
 	
-	// Assuming the response is a string
-	fmt.Printf("Response: %s\n", response.Response)
+
+	// fmt.Printf("Response: %s\n", response.Response)
+	// ---------------------------------------------------------------------------------------------
+
+	response, err := client.CreateMoreInventory(context.Background(), &pb.MoreInventories{
+		InventorySKU: []*pb.InventorySKU{
+			{
+				Sku: "SKU003",
+				Price: &pb.Price{
+					Base:     1.0,
+					Currency: "inr",
+					Discount: 3.0,
+				},
+				Quantity: 100.0,
+				Options: &pb.Options{
+					Size: &pb.Size{
+						H: 10.0,
+						L: 5.0,
+						W: 2.0,
+					},
+					Features: []string{"Feature 1", "Feature 2"},
+					Colors:   []string{"Red", "Blue"},
+					Ruling:   "Ruled",
+					Image:    "image.jpg",
+				},
+			},
+			{
+                Sku: "SKU004",
+				Price: &pb.Price{
+					Base:     1.0,
+					Currency: "inr",
+					Discount: 3.0,
+				},
+				Quantity: 100.0,
+				Options: &pb.Options{
+					Size: &pb.Size{
+						H: 10.0,
+						L: 5.0,
+						W: 2.0,
+					},
+					Features: []string{"Feature 1", "Feature 2"},
+					Colors:   []string{"Red", "Blue"},
+					Ruling:   "Ruled",
+					Image:    "image.jpg",
+				},
+			},
+		},
+	})
+	
+
+	if err != nil {
+		log.Fatalf("Failed to call SayHello: %v", err)
+	}
+
+	fmt.Printf("Response: %s\n", response)
+
 }
+
+       

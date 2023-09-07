@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InventoryServiceClient interface {
 	CreateInventory(ctx context.Context, in *InventorySKU, opts ...grpc.CallOption) (*InventoryResponse, error)
+	CreateMoreInventory(ctx context.Context, in *MoreInventories, opts ...grpc.CallOption) (*InventoryResponse, error)
 	UpdateInventory(ctx context.Context, in *UpdatedInventory, opts ...grpc.CallOption) (*InventoryResponse, error)
 }
 
@@ -43,6 +44,15 @@ func (c *inventoryServiceClient) CreateInventory(ctx context.Context, in *Invent
 	return out, nil
 }
 
+func (c *inventoryServiceClient) CreateMoreInventory(ctx context.Context, in *MoreInventories, opts ...grpc.CallOption) (*InventoryResponse, error) {
+	out := new(InventoryResponse)
+	err := c.cc.Invoke(ctx, "/grpc.InventoryService/CreateMoreInventory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *inventoryServiceClient) UpdateInventory(ctx context.Context, in *UpdatedInventory, opts ...grpc.CallOption) (*InventoryResponse, error) {
 	out := new(InventoryResponse)
 	err := c.cc.Invoke(ctx, "/grpc.InventoryService/UpdateInventory", in, out, opts...)
@@ -57,6 +67,7 @@ func (c *inventoryServiceClient) UpdateInventory(ctx context.Context, in *Update
 // for forward compatibility
 type InventoryServiceServer interface {
 	CreateInventory(context.Context, *InventorySKU) (*InventoryResponse, error)
+	CreateMoreInventory(context.Context, *MoreInventories) (*InventoryResponse, error)
 	UpdateInventory(context.Context, *UpdatedInventory) (*InventoryResponse, error)
 	mustEmbedUnimplementedInventoryServiceServer()
 }
@@ -67,6 +78,9 @@ type UnimplementedInventoryServiceServer struct {
 
 func (UnimplementedInventoryServiceServer) CreateInventory(context.Context, *InventorySKU) (*InventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInventory not implemented")
+}
+func (UnimplementedInventoryServiceServer) CreateMoreInventory(context.Context, *MoreInventories) (*InventoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMoreInventory not implemented")
 }
 func (UnimplementedInventoryServiceServer) UpdateInventory(context.Context, *UpdatedInventory) (*InventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateInventory not implemented")
@@ -102,6 +116,24 @@ func _InventoryService_CreateInventory_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InventoryService_CreateMoreInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MoreInventories)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InventoryServiceServer).CreateMoreInventory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.InventoryService/CreateMoreInventory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InventoryServiceServer).CreateMoreInventory(ctx, req.(*MoreInventories))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _InventoryService_UpdateInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdatedInventory)
 	if err := dec(in); err != nil {
@@ -130,6 +162,10 @@ var InventoryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateInventory",
 			Handler:    _InventoryService_CreateInventory_Handler,
+		},
+		{
+			MethodName: "CreateMoreInventory",
+			Handler:    _InventoryService_CreateMoreInventory_Handler,
 		},
 		{
 			MethodName: "UpdateInventory",

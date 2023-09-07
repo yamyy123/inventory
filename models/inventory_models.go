@@ -1,5 +1,6 @@
 package models
 
+
 type Inventory_SKU struct {
 	Sku      string  `json:"sku" bson:"sku"`
 	Price    Price   `json:"price" bson:"price"`

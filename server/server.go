@@ -16,8 +16,8 @@ import (
 
 func initDatabase(client *mongo.Client) {
 	Collection := config.GetCollection(client, "bankdb", "inventory")
-    //controllers.InventoryService =services.NewInventoryServiceInit(client,Collection,context.Background())
-	controllers.UpdateService =services.NewUpdatedInventoryServiceInit(Collection)
+    controllers.MoreInventoryService =services.NewMoreInventoryServiceInit(client,Collection,context.Background())
+	//controllers.UpdateService =services.NewUpdatedInventoryServiceInit(Collection)
 //this line setsup  the services needed for the operations
 /*t initializes the controllers.CustomerService variable by calling the service.InitCustomerService function, passing the MongoDB client and collections as parameters.
  This is probably where your application's business logic for customer services is set up.*/

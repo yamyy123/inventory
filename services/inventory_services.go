@@ -24,6 +24,12 @@ type UpdateInventoryService struct {
 	collection *mongo.Collection
 }
 
+type MoreInventoryService struct{
+	client              *mongo.Client
+	InventoryCollection *mongo.Collection
+	ctx                 context.Context
+}
+
 
 func NewUpdatedInventoryServiceInit(collection *mongo.Collection) interfaces.IUpdateInventory {
 	return &UpdateInventoryService{
@@ -36,6 +42,13 @@ func NewInventoryServiceInit(client *mongo.Client, collection *mongo.Collection,
 	return &InventoryService{client, collection, ctx}
 
 }
+
+func NewMoreInventoryServiceInit(client *mongo.Client, collection *mongo.Collection, ctx context.Context) interfaces.IMoreinventory {
+	return &MoreInventoryService{client, collection, ctx}
+
+}
+
+
 func (b *InventoryService) CreateInventory(user *models.Inventory_SKU) (string, error) {
 
 	result, err := b.InventoryCollection.InsertOne(b.ctx, &user)
@@ -98,4 +111,19 @@ func (s *UpdateInventoryService) UpdateInventory(pass *models.UpdatedInventory) 
 	}
 
 	return nil
+}
+
+func(b *MoreInventoryService) CreateMoreInventory(inventories []*models.Inventory_SKU)(string,error){
+	
+	var interfaceSlice []interface{}
+    for _, item := range inventories {
+        interfaceSlice = append(interfaceSlice, item)
+    }
+	_, err := b.InventoryCollection.InsertMany(b.ctx, interfaceSlice)
+	if err != nil {
+		// Handle the error, such as logging or returning an error response
+		fmt.Printf("Failed to insert data into MongoDB: %v\n", err)
+		return "error",err
+	}
+	return "success",nil
 }
