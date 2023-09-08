@@ -18,8 +18,8 @@ type RPCServer struct {
 
 var (
 	InventoryService interfaces.IInventory
-	UpdateService    interfaces.IUpdateInventory
-	MoreInventoryService interfaces.IMoreinventory
+	// UpdateService    interfaces.IUpdateInventory
+	// MoreInventoryService interfaces.IMoreinventory
 )
 
 func (s *RPCServer) CreateInventory(ctx context.Context, req *pro.InventorySKU) (*pro.InventoryResponse, error) {
@@ -65,7 +65,7 @@ func (s *RPCServer) UpdateInventory(ctx context.Context, req *pro.UpdatedInvento
 			Quantity: req.Quantity,
 		}
 
-	err := UpdateService.UpdateInventory(&pass)
+	err := InventoryService.UpdateInventory(&pass)
 	fmt.Println(err)
 	if err != nil {
 		return nil, err
@@ -78,47 +78,4 @@ func (s *RPCServer) UpdateInventory(ctx context.Context, req *pro.UpdatedInvento
 }
 
 
-func (s *RPCServer)CreateMoreInventory(ctx context.Context, req *pro.MoreInventories) (*pro.InventoryResponse, error) {
-	var inventoryData []*models.Inventory_SKU
 
-	//var inventoryData *models.MoreInventories
-
-    // Convert gRPC request data to your server's model
-    for _, grpcData := range req.InventorySKU {
-        // Create an instance of your model
-        inventory := &models.Inventory_SKU{
-            Sku: grpcData.Sku,
-            Price: models.Price{
-                Base:     grpcData.Price.Base,
-                Currency: grpcData.Price.Currency,
-                Discount: grpcData.Price.Discount,
-            },
-            Quantity: grpcData.Quantity,
-            Options: models.Options{
-                Size: models.Size{
-                    H: grpcData.Options.Size.H,
-                    L: grpcData.Options.Size.L,
-                    W: grpcData.Options.Size.W,
-                },
-                Features: grpcData.Options.Features,
-                Colors:   grpcData.Options.Colors,
-                Ruling:   grpcData.Options.Ruling,
-                Image:    grpcData.Options.Image,
-            },
-        }
-        
-        // Append the converted data to the slice
-        inventoryData = append(inventoryData, inventory)
-    }
-	
-	_, err := MoreInventoryService.CreateMoreInventory(inventoryData)
-	if err != nil {
-		return nil, err
-	} else {
-		responseCustomer := &pro.InventoryResponse{
-			Response: "success",
-		}
-
-		return responseCustomer, nil
-	}
-	}

@@ -5,22 +5,28 @@ import (
 	"fmt"
 	"inventory_SKU/config"
 	"inventory_SKU/constants"
-	pro "inventory_SKU/grpc"
 	controllers "inventory_SKU/controllers"
+	pro "inventory_SKU/grpc"
+	
+
 	//"module/netxd_dal/netxd_dal_service"
+	"inventory_SKU/services"
 	"net"
-     "inventory_SKU/services"
+
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc"
 )
 
+
 func initDatabase(client *mongo.Client) {
 	Collection := config.GetCollection(client, "bankdb", "inventory")
-    controllers.MoreInventoryService =services.NewMoreInventoryServiceInit(client,Collection,context.Background())
+    controllers.InventoryService =services.NewInventoryServiceInit(client,Collection,context.Background())
 	//controllers.UpdateService =services.NewUpdatedInventoryServiceInit(Collection)
 //this line setsup  the services needed for the operations
 /*t initializes the controllers.CustomerService variable by calling the service.InitCustomerService function, passing the MongoDB client and collections as parameters.
  This is probably where your application's business logic for customer services is set up.*/
+
 
 }
 

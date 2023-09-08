@@ -20,33 +20,33 @@ type InventoryService struct {
 	ctx                 context.Context
 }
 
-type UpdateInventoryService struct {
-	collection *mongo.Collection
-}
+// type UpdateInventoryService struct {
+// 	collection *mongo.Collection
+// }
 
-type MoreInventoryService struct{
-	client              *mongo.Client
-	InventoryCollection *mongo.Collection
-	ctx                 context.Context
-}
+// type MoreInventoryService struct{
+// 	client              *mongo.Client
+// 	InventoryCollection *mongo.Collection
+// 	ctx                 context.Context
+// }
 
 
-func NewUpdatedInventoryServiceInit(collection *mongo.Collection) interfaces.IUpdateInventory {
-	return &UpdateInventoryService{
-		collection: collection,
-	}
+// func NewUpdatedInventoryServiceInit(collection *mongo.Collection) interfaces.IUpdateInventory {
+// 	return &UpdateInventoryService{
+// 		collection: collection,
+// 	}
 
-}
+// }
 
 func NewInventoryServiceInit(client *mongo.Client, collection *mongo.Collection, ctx context.Context) interfaces.IInventory {
 	return &InventoryService{client, collection, ctx}
 
 }
 
-func NewMoreInventoryServiceInit(client *mongo.Client, collection *mongo.Collection, ctx context.Context) interfaces.IMoreinventory {
-	return &MoreInventoryService{client, collection, ctx}
+// func NewMoreInventoryServiceInit(client *mongo.Client, collection *mongo.Collection, ctx context.Context) interfaces.IMoreinventory {
+// 	return &MoreInventoryService{client, collection, ctx}
 
-}
+// }
 
 
 func (b *InventoryService) CreateInventory(user *models.Inventory_SKU) (string, error) {
@@ -61,11 +61,11 @@ func (b *InventoryService) CreateInventory(user *models.Inventory_SKU) (string, 
 }
 
 // IsInStock checks if an item with the given SKU is in stock.
-func (s *UpdateInventoryService) IsInStock(sku string) (bool, error) {
+func (s *InventoryService) IsInStock(sku string) (bool, error) {
 	filter := bson.M{"sku": sku}
 	var item models.Inventory_SKU
 
-	err := s.collection.FindOne(context.TODO(), filter).Decode(&item)
+	err := s.InventoryCollection.FindOne(context.TODO(), filter).Decode(&item)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false, nil // Item not found, consider it out of stock
@@ -77,12 +77,12 @@ func (s *UpdateInventoryService) IsInStock(sku string) (bool, error) {
 }
 
 // UpdatedInventory updates the inventory for an item.
-func (s *UpdateInventoryService) UpdateInventory(pass *models.UpdatedInventory) error {
+func (s *InventoryService) UpdateInventory(pass *models.UpdatedInventory) error {
 	filter := bson.M{"sku": pass.Sku}
 	fmt.Println(filter)
 	var item models.Inventory_SKU
 
-	err :=s.collection.FindOne(context.TODO(), filter).Decode(&item)
+	err :=s.InventoryCollection.FindOne(context.TODO(), filter).Decode(&item)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return fmt.Errorf("item with SKU %s not found", pass.Sku)
@@ -105,7 +105,7 @@ func (s *UpdateInventoryService) UpdateInventory(pass *models.UpdatedInventory) 
 
 	update := bson.M{"$inc": bson.M{"quantity": -pass.Quantity}}
 
-	_, err = s.collection.UpdateOne(context.TODO(), filter, update)
+	_, err = s.InventoryCollection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return err
 	}
@@ -113,17 +113,17 @@ func (s *UpdateInventoryService) UpdateInventory(pass *models.UpdatedInventory) 
 	return nil
 }
 
-func(b *MoreInventoryService) CreateMoreInventory(inventories []*models.Inventory_SKU)(string,error){
+// func(b *InventoryService) CreateMoreInventory(inventories []*models.Inventory_SKU)(string,error){
 	
-	var interfaceSlice []interface{}
-    for _, item := range inventories {
-        interfaceSlice = append(interfaceSlice, item)
-    }
-	_, err := b.InventoryCollection.InsertMany(b.ctx, interfaceSlice)
-	if err != nil {
-		// Handle the error, such as logging or returning an error response
-		fmt.Printf("Failed to insert data into MongoDB: %v\n", err)
-		return "error",err
-	}
-	return "success",nil
-}
+// 	var interfaceSlice []interface{}
+//     for _, item := range inventories {
+//         interfaceSlice = append(interfaceSlice, item)
+//     }
+// 	_, err := b.InventoryCollection.InsertMany(b.ctx, interfaceSlice)
+// 	if err != nil {
+// 		// Handle the error, such as logging or returning an error response
+// 		fmt.Printf("Failed to insert data into MongoDB: %v\n", err)
+// 		return "error",err
+// 	}
+// 	return "success",nil
+// }
