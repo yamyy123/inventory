@@ -6,7 +6,7 @@ package grpc;
 
 service InventoryService {
     rpc CreateInventory(InventorySKU) returns (InventoryResponse);
-    rpc UpdateInventory(UpdatedInventory)returns(InventoryResponse);
+    rpc UpdatedInventory(UpdateInventory)returns(InventoryResponse);
 }
 
 
@@ -14,14 +14,14 @@ service InventoryService {
 message InventorySKU {
     string sku = 1;
     Price price = 2;
-    double quantity = 3;
+    float quantity = 3;
     Options options = 4;
 }
 
 message Price{
-    double base=1;
+    float base=1;
     string currency=2;
-    double discount=3;
+    float discount=3;
 }
 
 message Options {
@@ -33,16 +33,16 @@ message Options {
 }
 
 message Size {
-    double h = 1;
-    double l = 2;
-    double w = 3;
+    float h = 1;
+    float l = 2;
+    float w = 3;
 }
 
 message InventoryResponse {
     string Response = 1;
 }
 
-message UpdatedInventory {
+message UpdateInventory {
     string sku=1;
-    double quantity=2;
+    float quantity=2;
 }

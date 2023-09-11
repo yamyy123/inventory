@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InventoryServiceClient interface {
 	CreateInventory(ctx context.Context, in *InventorySKU, opts ...grpc.CallOption) (*InventoryResponse, error)
-	UpdateInventory(ctx context.Context, in *UpdatedInventory, opts ...grpc.CallOption) (*InventoryResponse, error)
+	UpdatedInventory(ctx context.Context, in *UpdateInventory, opts ...grpc.CallOption) (*InventoryResponse, error)
 }
 
 type inventoryServiceClient struct {
@@ -43,9 +43,9 @@ func (c *inventoryServiceClient) CreateInventory(ctx context.Context, in *Invent
 	return out, nil
 }
 
-func (c *inventoryServiceClient) UpdateInventory(ctx context.Context, in *UpdatedInventory, opts ...grpc.CallOption) (*InventoryResponse, error) {
+func (c *inventoryServiceClient) UpdatedInventory(ctx context.Context, in *UpdateInventory, opts ...grpc.CallOption) (*InventoryResponse, error) {
 	out := new(InventoryResponse)
-	err := c.cc.Invoke(ctx, "/grpc.InventoryService/UpdateInventory", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpc.InventoryService/UpdatedInventory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *inventoryServiceClient) UpdateInventory(ctx context.Context, in *Update
 // for forward compatibility
 type InventoryServiceServer interface {
 	CreateInventory(context.Context, *InventorySKU) (*InventoryResponse, error)
-	UpdateInventory(context.Context, *UpdatedInventory) (*InventoryResponse, error)
+	UpdatedInventory(context.Context, *UpdateInventory) (*InventoryResponse, error)
 	mustEmbedUnimplementedInventoryServiceServer()
 }
 
@@ -68,8 +68,8 @@ type UnimplementedInventoryServiceServer struct {
 func (UnimplementedInventoryServiceServer) CreateInventory(context.Context, *InventorySKU) (*InventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInventory not implemented")
 }
-func (UnimplementedInventoryServiceServer) UpdateInventory(context.Context, *UpdatedInventory) (*InventoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateInventory not implemented")
+func (UnimplementedInventoryServiceServer) UpdatedInventory(context.Context, *UpdateInventory) (*InventoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatedInventory not implemented")
 }
 func (UnimplementedInventoryServiceServer) mustEmbedUnimplementedInventoryServiceServer() {}
 
@@ -102,20 +102,20 @@ func _InventoryService_CreateInventory_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InventoryService_UpdateInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdatedInventory)
+func _InventoryService_UpdatedInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInventory)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InventoryServiceServer).UpdateInventory(ctx, in)
+		return srv.(InventoryServiceServer).UpdatedInventory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.InventoryService/UpdateInventory",
+		FullMethod: "/grpc.InventoryService/UpdatedInventory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InventoryServiceServer).UpdateInventory(ctx, req.(*UpdatedInventory))
+		return srv.(InventoryServiceServer).UpdatedInventory(ctx, req.(*UpdateInventory))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -132,8 +132,8 @@ var InventoryService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _InventoryService_CreateInventory_Handler,
 		},
 		{
-			MethodName: "UpdateInventory",
-			Handler:    _InventoryService_UpdateInventory_Handler,
+			MethodName: "UpdatedInventory",
+			Handler:    _InventoryService_UpdatedInventory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

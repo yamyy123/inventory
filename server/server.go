@@ -20,7 +20,7 @@ import (
 
 
 func initDatabase(client *mongo.Client) {
-	Collection := config.GetCollection(client, "bankdb", "inventory")
+	Collection := config.GetCollection(client, "inventory_SKU", "items")
     controllers.InventoryService =services.NewInventoryServiceInit(client,Collection,context.Background())
 	//controllers.UpdateService =services.NewUpdatedInventoryServiceInit(Collection)
 //this line setsup  the services needed for the operations

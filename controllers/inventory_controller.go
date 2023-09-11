@@ -58,14 +58,14 @@ func (s *RPCServer) CreateInventory(ctx context.Context, req *pro.InventorySKU) 
 
 }
 
-func (s *RPCServer) UpdateInventory(ctx context.Context, req *pro.UpdatedInventory) (*pro.InventoryResponse, error) {
+func (s *RPCServer) UpdatedInventory(ctx context.Context, req *pro.UpdateInventory) (*pro.InventoryResponse, error) {
 
 		pass := models.UpdatedInventory{
 			Sku:      req.Sku,
 			Quantity: req.Quantity,
 		}
 
-	err := InventoryService.UpdateInventory(&pass)
+	err := InventoryService.UpdatedInventory(&pass)
 	fmt.Println(err)
 	if err != nil {
 		return nil, err

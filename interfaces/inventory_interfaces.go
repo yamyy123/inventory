@@ -9,6 +9,6 @@ import (
 type IInventory interface {
 	CreateInventory(user *models.Inventory_SKU) (string, error)
 	//CreateMoreInventory(inventories []*models.Inventory_SKU)(string,error)
-	UpdateInventory(pass * models.UpdatedInventory) (error)
+	UpdatedInventory(pass * models.UpdatedInventory) (error)
 	IsInStock(sku string) (bool, error)
 }

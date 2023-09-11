@@ -77,7 +77,7 @@ func (s *InventoryService) IsInStock(sku string) (bool, error) {
 }
 
 // UpdatedInventory updates the inventory for an item.
-func (s *InventoryService) UpdateInventory(pass *models.UpdatedInventory) error {
+func (s *InventoryService) UpdatedInventory(pass *models.UpdatedInventory) error {
 	filter := bson.M{"sku": pass.Sku}
 	fmt.Println(filter)
 	var item models.Inventory_SKU

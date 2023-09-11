@@ -4,14 +4,14 @@ package models
 type Inventory_SKU struct {
 	Sku      string  `json:"sku" bson:"sku"`
 	Price    Price   `json:"price" bson:"price"`
-	Quantity float64 `json:"quantity" bson:"quantity"`
+	Quantity float32 `json:"quantity" bson:"quantity,truncate"`
 	Options  Options `json:"options" bson:"options"`
 }
 
 type Price struct {
-	Base     float64 `json:"base" bson:"base"`
+	Base     float32 `json:"base" bson:"base,truncate"`
 	Currency string  `json:"currency" bson:"currency"`
-	Discount float64 `json:"discount" bson:"discount"`
+	Discount float32 `json:"discount" bson:"discount,truncate"`
 }
 type Options struct {
 	Size     Size     `json:"size" bson:"size"`
@@ -22,12 +22,12 @@ type Options struct {
 }
 
 type Size struct {
-	H float64 `json:"h" bson:"h"`
-	L float64 `json:"l" bson:"l"`
-	W float64 `json:"w" bson:"w"`
+	H float32 `json:"h" bson:"h,truncate"`
+	L float32 `json:"l" bson:"l,truncate"`
+	W float32 `json:"w" bson:"w,truncate"`
 }
 
 type UpdatedInventory struct {
 	Sku      string  `json:"sku" bson:"sku"`
-	Quantity float64 `json:"quantity" bson:"quantity"`
+	Quantity float32 `json:"quantity" bson:"quantity,truncate"`
 }
